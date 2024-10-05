@@ -1,0 +1,40 @@
+{% extends 'main.html' %} 
+{% block content %}
+<!-- <style>
+    .home-container {
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style> -->
+<!-- Entire content container -->
+<section class="container-fluid text-light" style="width: 100%;">
+    <!--This is the row that contains the content-->
+    <div class="row p-3">
+        {%if alert == "logout"%}
+        <div class="alert alert-success" role="alert">
+            Logged out successfully!
+        </div>
+        {% elif alert == "login" %}
+        <div class="alert alert-success" role="alert">
+            Logged in successfully!
+        </div>
+        {%endif%}
+        <!--Manages side panels-->
+        <div name="sidebar" class="container col-sm-4">
+            {% include 'base/topics_comp.html' %}
+            {% include 'base/activity_comp.html' %}
+        </div>
+        <!--Main feed of user in same row-->
+        <div class="container col-sm-8">
+            <div class="card" style="background-color: #242426;width: 3fr">
+                {%if request.user.is_authenticated%}
+                <p class="text-light px-4 pt-4 pb-0">Hello {{request.user}}!</p>
+                {%endif%}
+                <!--<p class="text-light px-4 py-2">{{ room_count }} room(s) available</p>-->
+                <h2 class="text-light px-4 py-2">Trending</h2>
+                {% include 'base/feed_comp.html' %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

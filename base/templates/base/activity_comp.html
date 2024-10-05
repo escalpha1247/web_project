@@ -1,0 +1,27 @@
+<style>
+    .links {
+        color: white;
+        text-decoration: none;
+    }
+</style>
+<div class="container px-0 pb-4" style="width: 1fr;">
+    <div class="card container text-light p-3" style="background-color: #242426;">
+        <div class="card-body px-0">
+            <h3 class="card-title px-2">Recent Activity</h3>
+            <hr />
+            {% for message in room_messages %}
+                <div class="container-fluid p-2">
+                    <div class="card bg-dark text-light">
+                        <div class="card-body">
+                            <small class="card-link"><a href="{% url 'profile' message.user.id %}" class="links">@{{message.user}}</a> -- {{message.created|timesince}} ago</small>
+                            <p>{{message}}</p>
+                            {% if request.user == message.user %}
+                            <a href="{% url 'delete-message' message.id %}" class="card-link">Delete</a>
+                            {%endif%}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
