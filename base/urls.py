@@ -1,5 +1,10 @@
 from django.urls import path
+from django.contrib import admin
 from . import views
+
+extra_patterns = [
+    path('admin/', admin.site.urls),
+]
 
 urlpatterns = [
     path('profile/<str:pk>/', views.userProfile, name="profile"),
