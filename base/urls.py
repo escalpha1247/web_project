@@ -2,11 +2,8 @@ from django.urls import path
 from django.contrib import admin
 from . import views
 
-extra_patterns = [
-    path('admin/', admin.site.urls),
-]
-
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('profile/<str:pk>/', views.userProfile, name="profile"),
     path('user-account/<str:pk>/', views.userAccount, name="account"),
     path('login/', views.loginPage, name="login"),
