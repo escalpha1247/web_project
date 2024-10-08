@@ -1,0 +1,16 @@
+<div class="container px-0 pb-4">
+    <div class="card container text-light p-3" style="background-color: #242426;width: 1fr;">
+        <div class="card-body">
+            <h3 class="card-title">Browse Topics</h3>
+            <hr />
+            <div class="card-link">
+                <a href="?q=">All</a>
+            </div>
+            {% for topic in topics %}
+            <div class="card-link ms-auto">
+                <a href="?q={{topic.name}}">{{ topic.name }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
