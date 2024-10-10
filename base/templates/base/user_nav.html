@@ -1,0 +1,31 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light">
+    <div class="container">
+        <h3>@{{ user.username }}</h3>
+        <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navmenu">
+            <ul class="navbar-nav ms-auto">
+                {% if user_followers == 1 %}
+                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_followers}} Follower</h5></li>
+                {%else%}
+                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_followers}} Followers</h5></li>
+                {% endif %}
+                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_following}} Following</h5></li>
+                <li class="nav-item px-3" style="margin: auto;"><h5>{{user_rooms}} Rooms</h5></li>
+                {% if request.user.username == user.username and page != "settings" %}
+                <a style="text-decoration: none;" href="{% url 'settings' request.user.id %}"><button class="btn btn-outline-primary rounded-pill" style="padding-bottom:1px;"><h5>Settings</h5></button></a>
+                {% else %}
+                <form action="{% url 'follow' user.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ user.username }}" name="followed_user">
+                    <input type="hidden" value="{{ request.user.username }}" name="following_user">
+                    {% if page == "usual" %}
+                    <button type="submit" class="btn btn-primary rounded-pill" style="padding-bottom:1px;"><h5>{{button_text}}</h5></button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </ul>
+        </div>
+    </div> 
+</nav>

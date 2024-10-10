@@ -11,6 +11,30 @@ from .forms import RoomForm
 # Create your views here.
 
 @login_required(login_url='login')
+def userSettings(request, pk):
+    user = User.objects.get(id=pk)
+    new_uname = request.POST.get('new_username')
+    page="settings"
+    user_followers = len(FollowersCount.objects.filter(user=user.username))
+    user_following = len(FollowersCount.objects.filter(follower=user.username))
+    user_rooms = len(Room.objects.filter(host=user.id))
+
+    if new_uname is not None:
+        user.username = new_uname
+        user.save()
+        return redirect('/profile/'+pk)
+
+    context = {
+        'user_followers':user_followers,
+        'user_following':user_following,
+        'user_rooms':user_rooms,
+        'page':page
+    }
+    
+    return render(request, 'base/acc_settings.html', context)
+  
+
+@login_required(login_url='login')
 def createTopic(request, pk):
     if request.method == "POST":
         topic_name = request.POST.get('topic_name').capitalize()
@@ -42,6 +66,7 @@ def follow(request, pk):
 
 def userProfile(request, pk):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+    page="usual"
     user = User.objects.get(id=pk)
     follower = request.user.username
     topics = Topic.objects.all()
@@ -62,17 +87,8 @@ def userProfile(request, pk):
     user_following = len(FollowersCount.objects.filter(follower=user.username))
     user_rooms = len(Room.objects.filter(host=user.id))
 
-    context = {'user':user, 'topics':topics, 'rooms':rooms, 'room_messages':room_messages, 'button_text':button_text, 'user_rooms':user_rooms, 'user_followers':user_followers, 'user_following':user_following}
+    context = {'page':page, 'user':user, 'topics':topics, 'rooms':rooms, 'room_messages':room_messages, 'button_text':button_text, 'user_rooms':user_rooms, 'user_followers':user_followers, 'user_following':user_following}
     return render(request, 'base/user.html', context)
-
-@login_required(login_url='login')
-def userAccount(request, pk):
-    user = User.objects.get(id=pk)
-    rq = "account"
-    if request.user != user:
-        return redirect('home')
-    
-    return render(request, 'base/user.html', {'user':user, 'rq':rq})
 
 def loginPage(request):
     page="login"

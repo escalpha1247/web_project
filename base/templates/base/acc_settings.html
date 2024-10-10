@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% block content %}
+{% include 'base/user_nav.html' %}
+<div class="container-fluid p-5">
+    <div class="card col-8" style="margin: auto;">
+        <div class="card-body p-4">
+            <h2 class="card-title pb-2">Settings</h2>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Username: </label>
+                    <input type="text" value="{{user.username}}" class="form-control" name="new_username" placeholder="Type in Username...">
+                </div>
+                <small>Note: this will cause you to logout.</small><br>
+                <button type="submit" class="btn btn-primary">Save changes</button>
+            </form>
+            <p class="card-subtitle py-2">Changed your mind?</p>
+            <a href="{% url 'profile' request.user.id %}" class="card-link">Go back</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
