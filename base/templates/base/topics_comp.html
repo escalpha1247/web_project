@@ -7,9 +7,11 @@
                 <a href="?q=">All</a>
             </div>
             {% for topic in topics %}
+            {% if topic.is_public %}
             <div class="card-link ms-auto">
                 <a href="?q={{topic.name}}">{{ topic.name }}</a>
             </div>
+            {%endif%}
             {% endfor %}
         </div>
     </div>

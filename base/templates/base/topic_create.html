@@ -1,0 +1,18 @@
+<div class="row px-4">
+    <div class="container pb-4">
+        <div class="card bg-dark text-light p-3">
+            <div class="card-body">
+                <form method="POST" action="{% url 'create-topic' request.user.id %}">
+                    {% csrf_token %}
+                    <h5 class="card-title pb-1">Create Topic: </h5>
+                    <input type="text" name="topic_name" style="text-transform: capitalize;" placeholder="Topic name ...">
+                    <label for="public">Public? </label>
+                    <label for="public">Yes</label>
+                    <input type="radio" id="public" name="topic_type" value="True">
+                    <label for="private">No</label>
+                    <input type="radio" id="private" name="topic_type" value="False" checked>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

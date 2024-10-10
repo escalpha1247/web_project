@@ -11,6 +11,19 @@ from .forms import RoomForm
 # Create your views here.
 
 @login_required(login_url='login')
+def createTopic(request, pk):
+    if request.method == "POST":
+        topic_name = request.POST.get('topic_name').capitalize()
+        topic_type = request.POST.get('topic_type')
+        user = User.objects.get(id=pk)
+        if topic_name is not None:
+            topic = Topic.objects.create(name=topic_name, is_public=topic_type, creator=user)
+            topic.save()
+            return redirect('home')
+
+    return render(request, 'base/topic_create.html', {})
+
+@login_required(login_url='login')
 def follow(request, pk):
     if request.method == "POST":
         follower = request.POST.get('following_user')
@@ -135,14 +148,17 @@ def room(request, pk):
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
+    topics = Topic.objects.all()
     if request.method == 'POST':
         form = RoomForm(request.POST)
         if form.is_valid():
             room = form.save(commit=False)
             room.host = request.user
+            topic = request.POST.get('topic')
+            room.topic = Topic.objects.create(name=topic)
             room.save()
             return redirect('home')
-    context = {'form':form}
+    context = {'form':form, 'topics':topics}
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='login')

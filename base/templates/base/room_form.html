@@ -1,12 +1,34 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<div>
-    <form method="POST" action="">
-        {% csrf_token %} <!-- Token for each form, prevent malicious attempts -->
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
+<div class="container-fluid p-5">
+    <div class="card col-4" style="margin: auto;">
+        <div class="card-body p-4">
+            <h2 class="card-title pb-2">Create New Room</h2>
+            <form method="POST" action="">
+                {% csrf_token %}
+                <label for="topic">Choose a topic: </label>
+                <select name="topic" id="topic">
+                    <optgroup label="Private topics">
+                        {% for topic in topics %}
+                        {% if topic.is_public == False and topic.creator == request.user %}
+                        <option value="{{topic.name}}">{{topic.name}}</option>
+                        {% endif %}
+                        {%endfor%}
+                    </optgroup>
+                    <optgroup label="Public topics">
+                        {% for topic in topics %}
+                        {% if topic.is_public == True %}
+                        <option value="{{ topic.name }}">{{ topic.name }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </optgroup>
+                </select>
+                <div class="pt-2"></div>
+                {{form.as_p}}
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
 </div>
-
 {% endblock content %}
