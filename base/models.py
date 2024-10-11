@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-
 # Create your models here. We can create classes - means tables..
 
 class Topic(models.Model):

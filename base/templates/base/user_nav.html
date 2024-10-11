@@ -6,26 +6,61 @@
         </button>
         <div class="collapse navbar-collapse" id="navmenu">
             <ul class="navbar-nav ms-auto">
-                {% if user_followers == 1 %}
-                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_followers}} Follower</h5></li>
+                {% if no_user_followers == 1 %}
+                <li class="nav-item px-3" style="margin: auto;">
+                    <button class="text-light bg-dark border border-0" data-bs-toggle="modal" data-bs-target="#followerModal"><h5>{{no_user_followers}} Follower</h5></button>
+                </li>
                 {%else%}
-                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_followers}} Followers</h5></li>
+                <li class="nav-item px-3" style="margin: auto;" data-bs-toggle="modal" data-bs-target="followerModal">
+                    <button class="text-light bg-dark border border-0" data-bs-toggle="modal" data-bs-target="#followerModal"><h5>{{no_user_followers}} Followers</h5></button>
+                </li>
                 {% endif %}
-                <li class="nav-item px-3"style="margin: auto;"><h5>{{user_following}} Following</h5></li>
-                <li class="nav-item px-3" style="margin: auto;"><h5>{{user_rooms}} Rooms</h5></li>
+                <li class="nav-item px-3" style="margin: auto;">
+                    <h5>{{no_user_following}} Following</h5>
+                </li>
+                <li class="nav-item px-3" style="margin: auto;">
+                    <h5>{{user_rooms}} Rooms</h5>
+                </li>
                 {% if request.user.username == user.username and page != "settings" %}
-                <a style="text-decoration: none;" href="{% url 'settings' request.user.id %}"><button class="btn btn-outline-primary rounded-pill" style="padding-bottom:1px;"><h5>Settings</h5></button></a>
+                <a style="text-decoration: none;" href="{% url 'settings' request.user.id %}"><button
+                        class="btn btn-outline-primary rounded-pill" style="padding-bottom:1px;">
+                        <h5>Settings</h5>
+                    </button></a>
                 {% else %}
                 <form action="{% url 'follow' user.id %}" method="POST">
                     {% csrf_token %}
                     <input type="hidden" value="{{ user.username }}" name="followed_user">
                     <input type="hidden" value="{{ request.user.username }}" name="following_user">
                     {% if page == "usual" %}
-                    <button type="submit" class="btn btn-primary rounded-pill" style="padding-bottom:1px;"><h5>{{button_text}}</h5></button>
+                    <button type="submit" class="btn btn-primary rounded-pill" style="padding-bottom:1px;">
+                        <h5>{{button_text}}</h5>
+                    </button>
                     {% endif %}
                 </form>
                 {% endif %}
             </ul>
         </div>
-    </div> 
+    </div>
 </nav>
+<!-- Modal -->
+<div class="modal fade" id="followerModal" tabindex="-1" aria-labelledby="followerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="followerModalLabel">Followers</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {% for follower in user_followers %}
+                <a style="text-decoration: none; color: white;">@{{ follower.follower }}</a>
+                <br>
+                <div class="py-2"></div>
+                {% endfor %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

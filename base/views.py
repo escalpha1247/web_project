@@ -83,11 +83,13 @@ def userProfile(request, pk):
     else:
         button_text = "Follow"
         
-    user_followers = len(FollowersCount.objects.filter(user=user.username))
-    user_following = len(FollowersCount.objects.filter(follower=user.username))
     user_rooms = len(Room.objects.filter(host=user.id))
+    user_followers = FollowersCount.objects.filter(user=user.username)
+    user_following = FollowersCount.objects.filter(follower=user.username)
+    no_user_followers = len(user_followers)
+    no_user_following = len(user_following)
 
-    context = {'page':page, 'user':user, 'topics':topics, 'rooms':rooms, 'room_messages':room_messages, 'button_text':button_text, 'user_rooms':user_rooms, 'user_followers':user_followers, 'user_following':user_following}
+    context = {'user_following':user_following,'user_followers':user_followers, 'page':page, 'user':user, 'topics':topics, 'rooms':rooms, 'room_messages':room_messages, 'button_text':button_text, 'user_rooms':user_rooms, 'no_user_followers':no_user_followers, 'no_user_following':no_user_following}
     return render(request, 'base/user.html', context)
 
 def loginPage(request):
@@ -152,7 +154,6 @@ def room(request, pk):
     room = Room.objects.get(id=pk)
     room_messages = room.message_set.all()
     participants = room.participants.all()
-
     if request.method == "POST":
         message = Message.objects.create(user=request.user, room=room, body=request.POST.get('comment'))
         room.participants.add(request.user)
