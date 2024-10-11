@@ -1,6 +1,8 @@
+{% include 'base/modal_followers.html' %}
+{% include 'base/modal_following.html' %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark text-light">
     <div class="container">
-        <h3>@{{ user.username }}</h3>
+        <a href="{% url 'profile' user.id %}" style="color: white; text-decoration: none;"><h3>@{{ user.username }}</h3></a>
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navmenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,13 +13,15 @@
                     <button class="text-light bg-dark border border-0" data-bs-toggle="modal" data-bs-target="#followerModal"><h5>{{no_user_followers}} Follower</h5></button>
                 </li>
                 {%else%}
-                <li class="nav-item px-3" style="margin: auto;" data-bs-toggle="modal" data-bs-target="followerModal">
+                <li class="nav-item px-3" style="margin: auto;">
                     <button class="text-light bg-dark border border-0" data-bs-toggle="modal" data-bs-target="#followerModal"><h5>{{no_user_followers}} Followers</h5></button>
                 </li>
                 {% endif %}
+
                 <li class="nav-item px-3" style="margin: auto;">
-                    <h5>{{no_user_following}} Following</h5>
+                    <button class="text-light bg-dark border border-0" data-bs-toggle="modal" data-bs-target="#followingModal"><h5>{{no_user_following}} Following</h5></button>
                 </li>
+                
                 <li class="nav-item px-3" style="margin: auto;">
                     <h5>{{user_rooms}} Rooms</h5>
                 </li>
@@ -42,25 +46,3 @@
         </div>
     </div>
 </nav>
-<!-- Modal -->
-<div class="modal fade" id="followerModal" tabindex="-1" aria-labelledby="followerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content bg-dark text-light">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="followerModalLabel">Followers</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% for follower in user_followers %}
-                <a style="text-decoration: none; color: white;">@{{ follower.follower }}</a>
-                <br>
-                <div class="py-2"></div>
-                {% endfor %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>

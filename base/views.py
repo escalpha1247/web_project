@@ -15,9 +15,12 @@ def userSettings(request, pk):
     user = User.objects.get(id=pk)
     new_uname = request.POST.get('new_username')
     page="settings"
-    user_followers = len(FollowersCount.objects.filter(user=user.username))
-    user_following = len(FollowersCount.objects.filter(follower=user.username))
+
     user_rooms = len(Room.objects.filter(host=user.id))
+    user_followers = FollowersCount.objects.filter(user=user.username)
+    user_following = FollowersCount.objects.filter(follower=user.username)
+    no_user_followers = len(user_followers)
+    no_user_following = len(user_following)
 
     if new_uname is not None:
         user.username = new_uname
@@ -27,6 +30,8 @@ def userSettings(request, pk):
     context = {
         'user_followers':user_followers,
         'user_following':user_following,
+        'no_user_followers':no_user_followers,
+        'no_user_following':no_user_following,
         'user_rooms':user_rooms,
         'page':page
     }
